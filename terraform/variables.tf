@@ -13,13 +13,13 @@ variable "location" {
 variable "app_service_plan_name" {
   description = "Name of the App Service Plan"
   type        = string
-  default     = "sensini7AppServicePlan"
+  default     = "myAppServicePlan"
 }
 
 variable "app_service_name" {
   description = "Name of the App Service"
   type        = string
-  default     = "myAppService"
+  default     = "sensini7AppService"
 }
 
 variable "app_service_sku_tier" {
