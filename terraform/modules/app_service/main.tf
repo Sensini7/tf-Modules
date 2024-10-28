@@ -5,7 +5,6 @@ resource "azurerm_app_service" "app" {
   app_service_plan_id = var.app_service_plan_id
 
   site_config {
-    scm_type         = "GitHub"
     linux_fx_version = var.app_runtime
     always_on        = true
     ftps_state       = "Disabled"
