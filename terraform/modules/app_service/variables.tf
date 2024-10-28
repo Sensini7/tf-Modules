@@ -21,5 +21,5 @@ variable "app_service_plan_id" {
 variable "app_runtime" {
   description = "Runtime stack for App Service"
   type        = string
-  default     = "NODE|14-lts"
+  default     = "20-lts"
 }
