@@ -33,7 +33,8 @@ jobs:
         run: |
           cd app
           zip -r ../app.zip .
-      # Login to Azure using Service Principal credentials (from AZURE_CREDENTIALS)
+
+      # Login to Azure using Service Principal
       - name: Azure Login
         uses: azure/login@v1
         with:
