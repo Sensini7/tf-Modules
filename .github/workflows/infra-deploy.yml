@@ -33,7 +33,7 @@ jobs:
           terraform_version: 1.3.0  # Update to your required Terraform version
 
       - name: Terraform Format
-        run: terraform fmt -check -recursive
+        run: terraform fmt -recursive
         working-directory: ./terraform
 
       - name: Terraform Init

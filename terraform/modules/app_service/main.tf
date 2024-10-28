@@ -5,8 +5,8 @@ resource "azurerm_linux_web_app" "app" {
   service_plan_id     = var.app_service_plan_id
 
   site_config {
-    always_on        = true
-    ftps_state       = "Disabled"
+    always_on  = true
+    ftps_state = "Disabled"
   }
 
   app_settings = {
