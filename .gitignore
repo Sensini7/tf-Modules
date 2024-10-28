@@ -1,5 +1,7 @@
 # Ignore .terraform directories
 terraform/.terraform/
+node_modules/
+
 
 # Additionally, ignore Terraform state files if not using remote state
 *.tfstate.*
