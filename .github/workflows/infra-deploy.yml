@@ -1,58 +1,59 @@
-name: Infrastructure Deployment
+name: Provision Infrastructure
 
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
+      - main
+  pull_request:
+  workflow_dispatch:
 
 jobs:
-  terraform-deploy:
-    name: Terraform Deploy
+  terraform:
+    name: Terraform Provision
     runs-on: ubuntu-latest
+    environment: production
+
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
-      # Checkout the repository
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.3.0  # Ensure this matches your Terraform version
+          terraform_version: 1.3.0  # Update to your required Terraform version
 
-      # Azure Login
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_AD_CLIENT_ID }}
-          client-secret: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-          tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+        working-directory: ./terraform
 
-      # Terraform Init
       - name: Terraform Init
-        working-directory: ./terraform
         run: terraform init
+        working-directory: ./terraform
 
-      # Terraform Validate
       - name: Terraform Validate
-        working-directory: ./terraform
         run: terraform validate
+        working-directory: ./terraform
 
-      # Terraform Plan
       - name: Terraform Plan
-        working-directory: ./terraform
-        id: plan
         run: terraform plan -out=tfplan
+        working-directory: ./terraform
 
-      # Terraform Apply
       - name: Terraform Apply
-        working-directory: ./terraform
+        if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan
-
-      # Output the App Service Hostname
-      - name: Output App Service Hostname
         working-directory: ./terraform
-        run: |
-          echo "App Service Hostname: $(terraform output -raw app_service_default_site_hostname)"
+
+      - name: Wait for 2 minutes
+        if: github.ref == 'refs/heads/main'
+        run: sleep 120
+        shell: bash
