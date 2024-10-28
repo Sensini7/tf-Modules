@@ -1,4 +1,4 @@
-name: Provision Infrastructure
+name: Infrastructure Deployment
 
 on:
   push:
@@ -53,7 +53,3 @@ jobs:
         run: terraform apply -auto-approve tfplan
         working-directory: ./terraform
 
-      - name: Wait for 2 minutes
-        if: github.ref == 'refs/heads/main'
-        run: sleep 120
-        shell: bash
