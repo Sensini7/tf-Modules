@@ -37,5 +37,5 @@ variable "app_service_sku_size" {
 variable "app_runtime" {
   description = "Runtime stack for App Service"
   type        = string
-  default     = "NODE|14-lts"
+  default     = "Node 20 LTS"
 }
