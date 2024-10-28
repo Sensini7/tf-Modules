@@ -24,3 +24,9 @@ variable "sku_size" {
   type        = string
   default     = "B1"
 }
+
+variable "app_service_plan_kind" {
+  description = "OS for the App Service Plan"
+  type        = string
+  default     = "Linux"
+}

@@ -34,8 +34,9 @@ variable "app_service_sku_size" {
   default     = "B1"
 }
 
+
 variable "app_runtime" {
   description = "Runtime stack for App Service"
   type        = string
-  default     = "NODE|20-lts"
+  default     = "20-lts"
 }
