@@ -12,12 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
-    env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-
     steps:
       # Checkout the repository
       - name: Checkout code
@@ -41,14 +35,11 @@ jobs:
           cd app
           zip -r ../app.zip .
 
-      # Login to Azure using Service Principal
+      # Login to Azure using Service Principal credentials (from AZURE_CREDENTIALS)
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_AD_CLIENT_ID }}
-          client-secret: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-          tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Deploy to Azure App Service
       - name: Deploy to Azure App Service
