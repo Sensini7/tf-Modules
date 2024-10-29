@@ -1,14 +1,16 @@
-name: Build and Deploy to Azure App Service via Docker Hub
+name: Application Deployment via Docker Hub
 
+# This workflow will run after the Infrastructure Deployment workflow completes successfully
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Infrastructure Deployment"]
+    types:
+      - completed
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       # Checkout the code
@@ -42,4 +44,3 @@ jobs:
         with:
           app-name: ${{ secrets.APP_SERVICE_NAME }}
           images: ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
-
